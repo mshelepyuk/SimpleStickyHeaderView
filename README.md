@@ -1,1 +1,1 @@
-# SimpleHeaderView Tests
+# Simple sticky header view Tests
