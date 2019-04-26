@@ -32,6 +32,8 @@ class StickyHeaderView: UIView {
         }
     }
     
+    private var cachedHeight: CGFloat?
+    
     deinit {
         unsubscribeFromHeaderBoundsChanges()
         unsubscribeFromScrollViewOffsetChanges()
@@ -84,6 +86,7 @@ extension StickyHeaderView {
     
     private func updateInsets() {
         let headerHeight = headerView.systemLayoutSizeFitting(.zero).height
+        cachedHeight = headerHeight
         scrollView.contentInset.top = headerHeight
         scrollView.scrollIndicatorInsets.top = headerHeight
         
@@ -133,7 +136,7 @@ extension StickyHeaderView {
     private func moveHeader(relatively contentOffset: CGPoint) {
         guard let headerViewTopConstraint = headerViewTopConstraint else { return }
         
-        let headerHeight = headerView.systemLayoutSizeFitting(.zero).height
+        let headerHeight = cachedHeight ?? headerView.systemLayoutSizeFitting(.zero).height
         let heightsDifference = headerHeight - minimumHeaderHeight
         let relativeYOffset = contentOffset.y + headerHeight
         let constraintConstant = max(-relativeYOffset, -heightsDifference)
